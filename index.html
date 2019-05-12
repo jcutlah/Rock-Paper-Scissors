@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+<body>
+    <div id="header" class="header-container-wrapper">
+        <h1 id="title">Rock Paper Scissors</h1>
+        <div id="welcome-message">
+
+        </div>
+    </div>
+    <div id="signup-modal" class="modal">
+        <div id="signup-prompt">Entering the dojo requires a username. Create a sweet warrior username.</div>
+        <form id="signup">
+            <input type="text" id="signup-user">
+            <button id="signup-button" type="submit">Sign Up!</button>
+        </form>
+    </div>
+    <div id="play-game-modal" class="modal">
+        <div id="choice-buttons">
+            <p id="in-progress-message"></p>
+            <button id="play-game">Play Game</button>
+            <button id="watch-game">Watch Game</button>
+        </div>
+    </div>
+    <div id="waiting-modal" class="modal">
+        <div id="waiting-message">Waiting for a challenger...</div>
+    </div>
+    <div id="rps-buttons">
+        <button id="rock">Rock</button>
+        <button id="paper">Paper</button>
+        <button id="scissors">Scissors</button>
+    </div>
+    <div id="game-feed">
+
+    </div>
+    <div id="leave-game">
+        <button>Leave Game</button>
+    </div>
+    <div id="chat-field">
+        <form>
+            <input type="text" id="chat"><button type="submit">Send</button>
+        </form>
+    </div>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
