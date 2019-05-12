@@ -15,11 +15,9 @@ $(document).ready(function(){
         messagingSenderId: "656182711016",
         appId: "1:656182711016:web:f094257f9026728f"
     };
-    var game;
     var players;
     var users;
     var user;
-    var usernames = [];
     var gameLog;
     var playerKey;
     var player1;
@@ -94,6 +92,7 @@ $(document).ready(function(){
             // tie score
             printToFeed('Tie score!');
         } else {
+            
             // increment user's wins
             incrementPlayerStats(winnerName,loserName);
             database.ref('users').once('value').then(function(snapshot){
@@ -134,7 +133,8 @@ $(document).ready(function(){
     function getGameReady(){
         // console.log(isAlreadyPlayer());
         // isPlaying = isAlreadyPlayer();
-        console.log(numPlayers);;
+        console.log(numPlayers);
+        // debugger;
         if (numPlayers === 1 && username){
             // debugger;
             $('body').addClass('player-waiting');
@@ -143,6 +143,7 @@ $(document).ready(function(){
             if (!isPlayer){
                 showModal('#play-game-modal', "#in-progress-message", "Looks like someone's waiting to play. You want to play or you wanna leave 'em hanging?");
             } else {
+                console.log('setting to active player');
                 $('body').addClass('active-player');
                 // showModal('#waiting-modal', "#waiting-message", "Waiting for a challenger...");
             }
@@ -348,9 +349,21 @@ $(document).ready(function(){
         feedItem.append(feedMessage);
         feedItem.append(timeStamp);
         $('#game-feed').prepend(feedItem);
+        if (message.message.indexOf('wins') > -1){
+            showModal('#winner-modal','#winner-message',message.message);
+            setTimeout(function(){
+                $('#winner-modal').hide();
+            }, 1000);
+        } else if (message.message.indexOf('Tie score') > -1){
+            showModal('#winner-modal','#winner-message',"Tie score!");
+            setTimeout(function(){
+                $('#winner-modal').hide();
+            }, 1000);
+        }
     });
     database.ref('game/players').on('child_removed', function(snapshot){
-        getGameReady(isPlayer);
+        isPlayer = false;
+        getGameReady();
     });
     database.ref('game').on('value',function(snapshot){
         getNumPlayers(snapshot.val().players);
@@ -361,13 +374,14 @@ $(document).ready(function(){
         // console.log(snapshot.val());
         getNumPlayers(snapshot.val());
         // isPlaying = isAlreadyPlayer();
-        roster = snapshot.val();
-        delete roster.recentUserAdded;
-        players = roster;
-        for (var key in roster) {
-            // console.log(roster[key].player.name);
+        players = snapshot.val();
+        delete players.recentUserAdded;
+        for (var key in players) {
+            console.log(players[key].player.name);
+            console.log(username);
             // console.log(key);
-            if (roster[key].player.name === username){
+            // debugger;
+            if (players[key].player.name === username){
                 isPlayer = true;
                 database.ref('game/isActiveGame').once('value').then(function(snapshot){
                     // console.log(snapshot.val());
