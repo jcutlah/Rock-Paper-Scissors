@@ -338,8 +338,15 @@ $(document).ready(function(){
 // ################### FIREBASE EVENT LISTENERS ################# //
 // Once at page load, then on every update that triggers the event ##############
     database.ref('gameLog').on('child_added', function(snapshot){
-        var feedItem = $('<p>');
-        feedItem.text(snapshot.val().message);
+        message = snapshot.val();
+        console.log(message);
+        var feedItem = $('<div>');
+        var feedMessage = $('<p>');
+        var timeStamp = $('<span>');
+        timeStamp.text(moment().format("LLL"));
+        feedMessage.text(message.message);
+        feedItem.append(feedMessage);
+        feedItem.append(timeStamp);
         $('#game-feed').prepend(feedItem);
     });
     database.ref('game/players').on('child_removed', function(snapshot){
