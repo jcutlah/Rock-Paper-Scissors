@@ -12,15 +12,18 @@
     <div id="header" class="header-container-wrapper">
         <h1 id="title">Rock Paper Scissors</h1>
         <div id="welcome-message">
-
+            <p>Current User: <span id="current-user"></span></p>
+            <p id='game-status-wrapper'>Game Status: <span id="game-status"></span></p>
         </div>
     </div>
     <div id="signup-modal" class="modal">
-        <div id="signup-prompt">Entering the dojo requires a username. Create a sweet warrior username.</div>
-        <form id="signup">
-            <input type="text" id="signup-user">
-            <button id="signup-button" type="submit">Sign Up!</button>
-        </form>
+        <div id="signup-prompt">Entering the dojo requires a username. Create a sweet username that you won't forget.</div>
+        <div class="signup-form-wrapper">
+            <form id="signup">
+                <input type="text" id="signup-user">
+                <button id="signup-button" type="submit" value="Sign Up">Sign Up</button>
+            </form>
+        </div>
     </div>
     <div id="play-game-modal" class="modal">
         <div id="choice-buttons">
@@ -32,9 +35,9 @@
     <div id="waiting-modal" class="modal">
         <div id="waiting-message">Waiting for a challenger...</div>
     </div>
-    <div id="winner-modal" class="">
+    <!-- <div id="winner-modal" class="">
         <p id="winner-message"></p>
-    </div>
+    </div> -->
     <div id="already-threw" class="modal"></div>
     <div id="rps-buttons" class="modal">
         <button id="rock">Rock</button>
@@ -49,7 +52,7 @@
     </div>
     <div id="chat-field">
         <form>
-            <input type="text" id="chat" placeholder="Type your message here (this chat is not private)"><button type="submit">Send</button>
+            <input type="text" id="chat" placeholder="Type a message (chat not private)"><button type="submit">Send</button>
         </form>
     </div>
     

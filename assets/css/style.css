@@ -1,12 +1,13 @@
 
 *{
     font-family: sans-serif;
+    box-sizing: border-box;
 }
 body {
     margin: 0;
     background-color: #008080;
     height: calc(100vh);
-    overflow:hidden;
+    overflow:scroll;
 }
 button:hover {
     cursor: pointer;
@@ -16,7 +17,10 @@ button:hover {
     color: #fff;
     margin-top: 50px;
 }
-#welcome-message {}
+#welcome-message {
+    text-align: center;
+    color: #fff;
+}
 #game-feed {
     display: none;
     text-align: right;
@@ -25,7 +29,8 @@ button:hover {
     position: fixed;
     bottom: 40px;
     width: 100%;
-    height: 150px;
+    height: 100px;
+    padding-top: 5px;
 }
 #game-feed div {
     margin-bottom: 7px;
@@ -103,6 +108,42 @@ button:hover {
 #signup-prompt {
     padding: 40px 28px;
 }
+#signup-modal form {
+    width: 80%;
+    border: 2px solid teal;
+    margin: 0 auto;
+}
+.signup-form-wrapper {
+    height: 35px;
+
+}
+#signup-modal form {
+    height: 100%;
+}
+#signup-modal form input {
+    height: 100%;
+    border: 0;
+    margin: 0;
+    float: left;
+}
+input#signup-user {
+    width: 69%;
+    font-size: 16px;
+    padding: 0 15px;
+    text-align: center;
+}
+button#signup-button {
+    width: 120px;
+    padding: 0;
+    width: 31%;
+    background-color: teal;
+    height: 100%;
+    border: 0;
+    float: right;
+    color: #fff;
+    font-size: 20px;
+}
+
 .new-game #game-feed p {
     /* opacity: 0; */
 }
@@ -118,11 +159,12 @@ button:hover {
 .active-player #leave-game {
     display: block;
 }
-.live-game #rps-buttons,
-.active-player #game-feed {
+.active-player.live-game #rps-buttons,
+.active-player #game-feed, .active-player.live-game #game-feed,
+.spectator #game-feed {
     display: block;
 }
-.player-chosen #rps-buttons {
+.player-chosen.active-player.live-game #rps-buttons {
     display: none;
 }
 .spectator #rps-buttons,
@@ -137,15 +179,16 @@ button:hover {
     max-width: 500px;
     height: fit-content;
     background-color: #fff;
-    border-radius: 5%;
-    padding-top: 25px;
+    border-radius: 0;
+    padding: 25px 0;
+    box-shadow: 6px 6px 18px 2px #ccc;
 }
 #chat-field {
     position: fixed;
+    display: none;
     bottom: 0;
     width: 100%;
     height: 40px;
-    border-top: 1px solid #ccc;
 }
 #chat-field button {
     width: 23%;
@@ -165,10 +208,22 @@ button:hover {
     border: 0;
     box-sizing: border-box;
     font-size: 27px;
+    border-top: 1px solid #ccc;
 }
 #chat-field input::placeholder {
     font-size: 15px;
 }
 #chat-field form {
     height: 100%;
+}
+.spectator #chat-field,
+.active-player #chat-field,
+.player-waiting.active-player #chat-field {
+    display: block;
+}
+#game-status-wrapper {
+    display: none;
+}
+.live-game.spectator #game-status-wrapper {
+    display: block;
 }

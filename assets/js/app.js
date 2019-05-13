@@ -100,6 +100,7 @@ $(document).ready(function(){
                 for (var key in users){
                     if (users[key].name === winnerName){
                         winnerWins = users[key].wins;
+                        winnerWins ++;
                         winnerLosses = users[key].losses
                         printToFeed(winnerName + " wins! ("+winnerWins+" wins, "+winnerLosses+" losses)");;
                     }
@@ -149,6 +150,9 @@ $(document).ready(function(){
             }
         } else if (numPlayers === 2 && username) {
             $('body').addClass('live-game');
+            if (!isPlayer){
+                $('body').addClass('spectator');
+            }
             for (var key in players){
                 console.log(players);
                 delete players.recentUserAdded;
@@ -167,6 +171,7 @@ $(document).ready(function(){
             console.log('we\'re ready for a game here!');
             hideModal('#play-game-modal');
         } else if (numPlayers === 0 && username) {
+            database.ref('game/isActiveGame').set(false);
             $('body').addClass('new-game');
             $('body').removeClass('player-waiting');
             $('body').removeClass('player-chosen');
@@ -176,7 +181,7 @@ $(document).ready(function(){
             showModal('#play-game-modal', "#in-progress-message", "Looks like we're ready for a new game! You want to play?");
         } else {
             // console.log(numPlayers);
-            $('#game-feed').hide();
+            // $('#game-feed').hide();
         }
         
     }
@@ -204,9 +209,13 @@ $(document).ready(function(){
             }
         });
     }
+    function printGameStatus(status){
+        $('#game-status').text(status);
+    }
     function printToFeed(message){
         database.ref('gameLog').push({
-            message
+            message,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
         });
     }
     function showModal(modalTarget, messageTarget, newPrompt){
@@ -219,16 +228,19 @@ $(document).ready(function(){
     if (localStorage.getItem('rpsUsername') === null){
         console.log('no username');
         showModal('#signup-modal');
+        $('#signup-user').focus();
     } else {
         username = localStorage.getItem('rpsUsername');
+        $('#current-user').text(username);
     }
 
 // ################# CLICK EVENT LISTENERS ################ //
 
     $('#signup-button').on('click',function(e){
         e.preventDefault();
-        $('#game-feed').show();
+        // $('#game-feed').show();
         username = $('#signup-user').val();
+        $('#current-user').text(username);
         userInfo = {
             name: username,
             dateAdded: firebase.database.ServerValue.TIMESTAMP,
@@ -286,7 +298,7 @@ $(document).ready(function(){
         });
     });
     $('#watch-game').on('click',function(){
-        $('#game-feed').show();
+        // $('#game-feed').show();
         printToFeed(username+" joined as a spectator");
         $('body').addClass('spectator');
     });
@@ -297,9 +309,8 @@ $(document).ready(function(){
         $('#chat').val('');
     });
     $('#rock').on('click',function(){
-        printToFeed(username+" has made their choice.");
+        printToFeed(username+" has made their move.");
         $('body').addClass('player-chosen');
-        // console.log('game/players/'+playerKey+'/player');
         database.ref('game/players/'+playerKey+'/player').set({
             choice: {
                 name: 'rock',
@@ -310,7 +321,7 @@ $(document).ready(function(){
         checkChoices();
     });
     $('#paper').on('click',function(){
-        printToFeed(username+" has made their choice.");
+        printToFeed(username+" has made their move.");
         $('body').addClass('player-chosen');
         // console.log('game/players/'+playerKey+'/player');
         database.ref('game/players/'+playerKey+'/player').set({
@@ -323,7 +334,7 @@ $(document).ready(function(){
         checkChoices();
     });
     $('#scissors').on('click',function(){
-        printToFeed(username+" has made their choice.");
+        printToFeed(username+" has made their move.");
         $('body').addClass('player-chosen');
         // console.log('game/players/'+playerKey+'/player');
         database.ref('game/players/'+playerKey+'/player').set({
@@ -341,32 +352,42 @@ $(document).ready(function(){
     database.ref('gameLog').on('child_added', function(snapshot){
         message = snapshot.val();
         console.log(message);
-        var feedItem = $('<div>');
-        var feedMessage = $('<p>');
-        var timeStamp = $('<span>');
-        timeStamp.text(moment().format("LLL"));
-        feedMessage.text(message.message);
-        feedItem.append(feedMessage);
-        feedItem.append(timeStamp);
-        $('#game-feed').prepend(feedItem);
-        if (message.message.indexOf('wins') > -1){
-            showModal('#winner-modal','#winner-message',message.message);
-            setTimeout(function(){
-                $('#winner-modal').hide();
-            }, 1000);
-        } else if (message.message.indexOf('Tie score') > -1){
-            showModal('#winner-modal','#winner-message',"Tie score!");
-            setTimeout(function(){
-                $('#winner-modal').hide();
-            }, 1000);
+        if (message == "test"){
+            //ignore
+        } else {
+            var feedItem = $('<div>');
+            var feedMessage = $('<p>');
+            var timeStamp = $('<span>');
+            timeStamp.text(moment(message.timestamp).format("LLL"));
+            feedMessage.text(message.message);
+            feedItem.append(feedMessage);
+            feedItem.append(timeStamp);
+            $('#game-feed').prepend(feedItem);
+            // if (message.message.indexOf('wins') > -1){
+            //     showModal('#winner-modal','#winner-message',message.message);
+            //     setTimeout(function(){
+            //         $('#winner-modal').hide();
+            //     }, 1000);
+            // } else if (message.message.indexOf('Tie score') > -1){
+            //     showModal('#winner-modal','#winner-message',"Tie score!");
+            //     setTimeout(function(){
+            //         $('#winner-modal').hide();
+            //     }, 1000);
+            // }
         }
     });
     database.ref('game/players').on('child_removed', function(snapshot){
         isPlayer = false;
+        $('body').removeClass('spectator');
         getGameReady();
     });
     database.ref('game').on('value',function(snapshot){
         getNumPlayers(snapshot.val().players);
+        if (snapshot.val().isActiveGame){
+            printGameStatus('Game in progress');
+        } else {
+            $('#game-status-wrapper').hide();
+        }
     });
     database.ref('game/players').on('value', function(snapshot){
         // debugger;
