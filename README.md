@@ -3,7 +3,7 @@ A realtime game that allows to players to compete head to head, while others can
 
 Play the game here - [Rock Paper Scissors Shoot!](https://jcutlah.github.io/paper-scissors-rock/)
 
-![Trivia Game Screenshot](assets/images/PlayersAndSpectators.png)
+![Rock Paper Scissors all views](assets/images/PlayersAndSpectators.png)
 
 The game includes a chat feed, that allows players and spectators to interact with each other during play time. 
 
