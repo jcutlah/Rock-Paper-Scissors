@@ -1,7 +1,7 @@
 # Rock Paper Scissors
 A realtime game that allows to players to compete head to head, while others can watch as spectators. The database component (required for the realtime functionality of the game) is Google Firebase
 
-Play the game here - [Rock Paper Scissors Shoot!](https://jcutlah.github.io/paper-scissors-rock/)
+Play the game here - [Rock Paper Scissors Shoot!](https://jcutlah.github.io/rock-paper-scissors/)
 
 ![Rock Paper Scissors all views](assets/images/PlayersAndSpectators.png)
 
